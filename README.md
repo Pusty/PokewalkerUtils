@@ -32,7 +32,7 @@ The binary file is loaded again for each transaction with the Pokewalker. Withou
 ## How does this work?
 
 The cartridge and the Pokewalker normally communicate using an IRDA Transceiver. The game talks to this Transceiver using [Auxiliary SPI](https://problemkaputt.de/gbatek-ds-cartridge-i-o-ports.htm).
-The `desmumePokewalker.lua` DeSmuME script hooks the code parts responsible for reading and writing, handles the (very weak) encryption and decryption, and redirects the data as packets to `"127.0.0.1:54545` and reads the responses from there.
+The `desmumePokewalker.lua` DeSmuME script hooks the code parts responsible for reading and writing, handles the (very weak) encryption and decryption, and redirects the data as packets to `127.0.0.1:54545` and reads the responses from there.
 Interestingly parts of this is [already implemented in DeSmuMe](https://github.com/TASEmulators/desmume/blob/d854909b040b021ef027d53cbfd6555b175c1bb8/desmume/src/mc.cpp) but I decided against modifying the emulator itself. (Given how tedious the installation of the dev-build + lua + sockets setup is, this was maybe a mistake). 
 `pokewalker_interface.py` accepts these connections and uses the `pokewalker.py` to emulate the message handling like a Pokewalker, based on [Dmitry.GR's](https://dmitry.gr/?r=05.Projects&proj=28.%20pokewalker) documentation and what I understood from the Pokewalker Disassembly Dump.
 The way the game sends Pokemon to the Pokewalker is by overwriting the entire asset-memory of the Pokewalker. When receiving Gifts or Pokemon it doesn't read the entire memory back.
