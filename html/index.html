@@ -1,0 +1,480 @@
+<html>
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Pokewalker</title>
+  
+  <style>
+  
+  #screen {
+    width: 55vw;
+    min-width: 329px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+  }
+  
+  </style>
+</head>
+
+<body>
+
+<canvas id="screen"></canvas>
+
+<script>
+
+
+function loadImage(url) {
+    var img = new window.Image();
+    img.setAttribute("src", url);
+    return img;
+}
+
+var boxImage = loadImage("img/box.png");
+var pokemonName = loadImage("img/pokemon_name.png");
+var bigPokemonImage = loadImage("img/pokemon_big.gif");
+var pokemonImage = loadImage("img/pokemon.gif");
+var routeImage = loadImage("img/route_img.png");
+var routeName = loadImage("img/route_name.png");
+
+var bubbleExclmation = loadImage("img/bubble_exclamation.png");
+var bubbleHeart = loadImage("img/bubble_heart.png");
+var bubbleMusic = loadImage("img/bubble_music.png");
+var bubbleSmile = loadImage("img/bubble_smile.png");
+var bubbleNeutral = loadImage("img/bubble_neutral.png");
+var bubbleEllipsis = loadImage("img/bubble_ellipsis.png");
+var bubbleExclmation2 = loadImage("img/bubble_exclamation2.png");
+
+var pokeball8x8 = loadImage("img/pokeball_8x8.png");
+var item8x8 = loadImage("img/item_8x8.png");
+
+
+
+var menuRadar = loadImage("img/menu_radar.png");
+var menuDowsing = loadImage("img/menu_dowsing.png");
+var menuConnect = loadImage("img/menu_connect.png");
+var menuCard = loadImage("img/menu_card.png");
+var menuPkmn = loadImage("img/menu_pkmn.png");
+var menuSettings = loadImage("img/menu_settings.png");
+
+var iconRadar = loadImage("img/icon_radar.png");
+var iconDowsing = loadImage("img/icon_dowsing.png");
+var iconConnect = loadImage("img/icon_connect.png");
+var iconCard = loadImage("img/icon_card.png");
+var iconPkmn = loadImage("img/icon_pkmn.png");
+var iconSettings = loadImage("img/icon_settings.png");
+
+
+
+var settingsSound = loadImage("img/settings_sound.png");
+var settingsShade = loadImage("img/settings_shade.png");
+var settingsSoundOff = loadImage("img/settings_sound_off.png");
+var settingsSoundLow = loadImage("img/settings_sound_low.png");
+var settingsSoundHigh = loadImage("img/settings_sound_high.png");
+
+var routePokemon0 = loadImage("img/route_pokemon0.gif");
+var routePokemon0Name = loadImage("img/route_pokemon0_name.png");
+
+
+var cardPerson = loadImage("img/card_person.png");
+var cardName = loadImage("img/card_name.png");
+var cardRoute = loadImage("img/card_route.png");
+var cardSteps = loadImage("img/card_steps.png");
+var cardTime = loadImage("img/card_time.png");
+var cardDays = loadImage("img/card_days.png");
+var cardToal = loadImage("img/card_total.png");
+
+var dowsingLeft = loadImage("img/dowsing_left.png");
+var dowsingBush = loadImage("img/dowsing_bush.png");
+
+var radarBush = loadImage("img/radar_bush.png");
+var radarExclamation0 = loadImage("img/radar_exclamation0.png");
+var radarExclamation1 = loadImage("img/radar_exclamation1.png");
+var radarExclamation2 = loadImage("img/radar_exclamation2.png");
+var radarClick = loadImage("img/radar_click.png");
+
+
+var battleAttack = loadImage("img/battle_attack.png");
+var battleAttackCrit = loadImage("img/battle_attack_crit.png");
+var battleAppeared = loadImage("img/battle_appeared.png");
+var battleHP = loadImage("img/battle_hp.png");
+var battleCatch = loadImage("img/battle_catch.png");
+var battleMenu = loadImage("img/battle_menu.png");
+
+var textDiscover = loadImage("img/text_discover.png");
+
+
+
+
+
+
+var arrow8x8up = loadImage("img/arrow_8x8_up.png");
+var arrow8x8up2 = loadImage("img/arrow_8x8_up_offset.png");
+var arrow8x8down = loadImage("img/arrow_8x8_down.png");
+var arrow8x8down2 = loadImage("img/arrow_8x8_down_offset.png");
+var arrow8x8left = loadImage("img/arrow_8x8_left.png");
+var arrow8x8left2 = loadImage("img/arrow_8x8_left_offset.png");
+var arrow8x8right = loadImage("img/arrow_8x8_right.png");
+var arrow8x8right2 = loadImage("img/arrow_8x8_right_offset.png");
+var arrowReturn = loadImage("img/arrow_return.png");
+
+
+
+
+var wattSymbol = loadImage("img/watt_symbol.png");
+
+
+
+var charSet = [loadImage("img/0.png"),loadImage("img/1.png"),loadImage("img/2.png"),loadImage("img/3.png"),loadImage("img/4.png"),loadImage("img/5.png"),loadImage("img/6.png"),loadImage("img/7.png"),
+               loadImage("img/8.png"),loadImage("img/9.png"),loadImage("img/10.png"),loadImage("img/11.png"),loadImage("img/12.png")];
+
+var c = document.getElementById("screen");
+c.width = 96;
+c.height = 64;
+
+// Sleep, Home, Menu, Radar, Dowsing, Comms, Stats, Inventory, and Settings
+
+/*
+       drawHomeScreenMain
+            drawPokemonFeelingBubble
+            drawCurrentAreaSmallImage
+            homeScreenDrawLargeCurrentPokemonImage
+*/
+function drawHomescreen(canvas) {
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    // big poke image, this can stay this way <- animate this though
+    ctx.drawImage(bigPokemonImage, 32, 0);
+    
+    // route image, this can stay this way
+    ctx.drawImage(routeImage, 0, 24);
+    
+    // this needs to change depending on the situation
+    ctx.drawImage(bubbleExclmation, 8, 4);
+    
+    // pokemon caught, up to 3
+    ctx.drawImage(pokeball8x8, 0, 64-8);
+    ctx.drawImage(pokeball8x8, 8, 64-8);
+    ctx.drawImage(pokeball8x8, 16, 64-8);
+    
+    // items found, up to 3
+    ctx.drawImage(item8x8, 24, 64-8);
+    ctx.drawImage(item8x8, 32, 64-8);
+    ctx.drawImage(item8x8, 40, 64-8);
+    
+    // step numbers
+    ctx.drawImage(charSet[0], 96-8, 64-16);
+    ctx.drawImage(charSet[1], 96-16, 64-16);
+    ctx.drawImage(charSet[2], 96-24, 64-16);
+    ctx.drawImage(charSet[3], 96-32, 64-16);
+    
+    // seperation line
+    ctx.fillRect( 0, 48, 96, 1 );
+    
+}
+
+
+function drawMenu(canvas) {
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    
+    // menuRadar, menuDowsing, menuConnect, menuCard, menuPkmn, menuSettings
+    ctx.drawImage(arrow8x8left, 0, 4);
+    ctx.drawImage(arrow8x8right, 88, 4);
+    ctx.drawImage(menuSettings, 8, 0);
+    
+    ctx.drawImage(arrow8x8down, 96-96+4, 16);
+    ctx.drawImage(iconRadar, 96-96, 24);
+    
+    ctx.drawImage(arrow8x8down, 96-80+4, 16+4);
+    ctx.drawImage(iconDowsing, 96-80, 24+4);
+    
+    ctx.drawImage(arrow8x8down, 96-64+4, 16+8);
+    ctx.drawImage(iconConnect, 96-64, 24+8);
+    
+    ctx.drawImage(arrow8x8down, 96-48+4, 16+8);
+    ctx.drawImage(iconCard, 96-48, 24+8);
+    
+    ctx.drawImage(arrow8x8down, 96-32+4, 16+4);
+    ctx.drawImage(iconPkmn, 96-32, 24+4);
+    
+    ctx.drawImage(arrow8x8down, 96-16+4, 16);
+    ctx.drawImage(iconSettings, 96-16, 24);
+    
+    
+    // watt numbers
+    ctx.drawImage(wattSymbol, 96-8, 64-16);
+    ctx.drawImage(charSet[0], 96-16, 64-16);
+    ctx.drawImage(charSet[1], 96-24, 64-16);
+    ctx.drawImage(charSet[2], 96-32, 64-16);
+    ctx.drawImage(charSet[3], 96-40, 64-16);
+    
+    // for stroll
+    ctx.drawImage(charSet[12], 96-48, 64-16);
+    
+    ctx.drawImage(wattSymbol, 96-64, 64-16);
+    ctx.drawImage(charSet[1], 96-72, 64-16);
+    ctx.drawImage(charSet[2], 96-80, 64-16);
+    ctx.drawImage(charSet[3], 96-88, 64-16);
+    
+    
+    
+}
+
+function drawSettings(canvas) {
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    
+    ctx.drawImage(arrowReturn, 0, 0);
+    ctx.drawImage(menuSettings, 8, 0);
+    
+    
+    ctx.drawImage(arrow8x8right, 0, 16+4);
+    ctx.drawImage(settingsSound, 8, 16);
+    
+    ctx.drawImage(arrow8x8right, 48, 16+4);
+    ctx.drawImage(settingsShade, 56, 16);
+}
+
+function drawPkmn(canvas) {
+
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    ctx.drawImage(arrowReturn, 0, 0);
+    ctx.drawImage(menuPkmn, 8, 0);
+    
+        
+    ctx.drawImage(arrow8x8down, 8, 16);
+    ctx.drawImage(pokeball8x8, 8, 24);
+    
+    ctx.drawImage(arrow8x8down, 24, 16);
+    ctx.drawImage(pokeball8x8, 24, 24);
+    
+    ctx.drawImage(arrow8x8down, 32, 16);
+    ctx.drawImage(pokeball8x8, 32, 24);
+    
+    ctx.drawImage(arrow8x8down, 40, 16);
+    ctx.drawImage(pokeball8x8, 40, 24);
+    
+    
+    ctx.drawImage(arrow8x8down, 24, 32);
+    ctx.drawImage(item8x8, 24, 40);
+    
+    ctx.drawImage(arrow8x8down, 32, 32);
+    ctx.drawImage(item8x8, 32, 40);
+    
+    ctx.drawImage(arrow8x8down, 40, 32);
+    ctx.drawImage(item8x8, 40, 40);
+
+    
+    ctx.drawImage(pokemonImage, 64, 24);
+    
+    ctx.drawImage(routePokemon0Name, 0, 64-16);
+    
+    // seperation line
+    ctx.fillRect( 0, 48, 96, 1 );
+    ctx.fillRect( 0, 63, 96, 1 );
+    ctx.fillRect( 0, 48, 1, 16 );
+    ctx.fillRect( 95, 48, 1, 16 );
+    
+}
+
+function drawCard(canvas) {
+
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    ctx.drawImage(arrowReturn, 0, 0);
+    ctx.drawImage(menuCard, 8, 0);
+    //ctx.drawImage(arrow8x8right, 88, 4); // this would show previous days steps and stuff, but honestly who cares
+    
+    
+    ctx.drawImage(cardPerson, 0, 16);
+    ctx.drawImage(cardName, 16, 16);
+    
+    ctx.drawImage(cardRoute, 0, 32);
+    ctx.drawImage(routeName, 16, 32);
+    
+    ctx.drawImage(cardTime, 0, 48);
+    
+    ctx.drawImage(charSet[3], 32, 48);
+    ctx.drawImage(charSet[3], 40, 48);
+    
+    ctx.drawImage(charSet[10], 48, 48);
+    
+    ctx.drawImage(charSet[3], 56, 48);
+    ctx.drawImage(charSet[3], 64, 48);
+    
+    ctx.drawImage(charSet[10], 72, 48);
+    
+    ctx.drawImage(charSet[3], 80, 48);
+    ctx.drawImage(charSet[3], 88, 48);
+    
+    
+}
+
+function drawDowsing(canvas) {
+
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    ctx.drawImage(routeImage, 0, 0);
+    ctx.drawImage(dowsingLeft, 32, 0);
+    
+    ctx.drawImage(charSet[3], 64, 0);
+     
+     
+    ctx.drawImage(arrow8x8up, 3, 40);
+    ctx.drawImage(dowsingBush, 0, 24);
+    ctx.drawImage(item8x8, 4, 24);
+    
+    ctx.drawImage(arrow8x8up, 3+16, 40);
+    ctx.drawImage(dowsingBush, 16, 24);
+    ctx.drawImage(item8x8, 4+16, 24);
+    
+    ctx.drawImage(arrow8x8up, 3+32, 40);
+    ctx.drawImage(dowsingBush, 32, 24);
+    ctx.drawImage(item8x8, 4+32, 24);
+    
+    ctx.drawImage(arrow8x8up, 3+48, 40);
+    ctx.drawImage(dowsingBush, 48, 24);
+    ctx.drawImage(item8x8, 4+48, 24);
+    
+    ctx.drawImage(arrow8x8up, 3+64, 40);
+    ctx.drawImage(dowsingBush, 64, 24);
+    ctx.drawImage(item8x8, 4+64, 24);
+    
+    ctx.drawImage(arrow8x8up, 3+80, 40);
+    ctx.drawImage(dowsingBush, 80, 24);
+    ctx.drawImage(item8x8, 4+80, 24);
+     
+     
+    ctx.drawImage(textDiscover, 0, 64-16);
+    
+    // seperation line
+    ctx.fillRect( 0, 48, 96, 1 );
+    ctx.fillRect( 0, 63, 96, 1 );
+    ctx.fillRect( 0, 48, 1, 16 );
+    ctx.fillRect( 95, 48, 1, 16 );
+     
+}
+
+
+function drawRadar(canvas) {
+
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    ctx.drawImage(arrow8x8right, 0, 8);
+    ctx.drawImage(radarBush, 8, 0);
+    ctx.drawImage(radarExclamation0, 8+16, 0);
+    
+    
+    ctx.drawImage(arrow8x8right, 48, 8);
+    ctx.drawImage(radarBush, 8+48, 0);
+    ctx.drawImage(radarExclamation1, 8+48+16, 0);
+    
+    ctx.drawImage(arrow8x8right, 0+8, 24+8);
+    ctx.drawImage(radarBush, 8+8, 24);
+    ctx.drawImage(radarExclamation2, 8+8+16, 24);
+    
+    ctx.drawImage(arrow8x8right, 48+8, 24+8);
+    ctx.drawImage(radarBush, 8+48+8, 24);
+    ctx.drawImage(radarClick, 8+48+8+16, 24);
+    
+    
+    ctx.drawImage(textDiscover, 0, 64-16);
+    
+    // seperation line
+    ctx.fillRect( 0, 48, 96, 1 );
+    ctx.fillRect( 0, 63, 96, 1 );
+    ctx.fillRect( 0, 48, 1, 16 );
+    ctx.fillRect( 95, 48, 1, 16 );
+     
+}
+
+function drawFight(canvas) {
+
+    var ctx = c.getContext("2d");
+    
+    ctx.fillStyle = "#FFFFFF";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#000000";
+    
+    // invert image
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.drawImage(routePokemon0, -8, 0, -32, 24);
+    ctx.restore();
+    
+    //ctx.drawImage(battleAppeared, 8, 0);
+    
+    ctx.drawImage(battleHP, 8, 24);
+    ctx.drawImage(battleHP, 16, 24);
+    ctx.drawImage(battleHP, 24, 24);
+    ctx.drawImage(battleHP, 32, 24);
+    
+    
+    ctx.drawImage(pokemonImage, 64, 8);
+    
+    ctx.drawImage(battleHP, 64, 0);
+    ctx.drawImage(battleHP, 72, 0);
+    ctx.drawImage(battleHP, 80, 0);
+    ctx.drawImage(battleHP, 88, 0);
+    
+    
+    ctx.drawImage(battleAttack, 44, 0);
+
+    /*
+    ctx.drawImage(textDiscover, 0, 64-32);
+    ctx.drawImage(cardName, 0, 64-16);
+    
+    // seperation line
+    ctx.fillRect( 0, 32, 96, 1 );
+    ctx.fillRect( 0, 63, 96, 1 );
+    ctx.fillRect( 0, 32, 1, 32 );
+    ctx.fillRect( 95, 32, 1, 32 );
+    */
+    
+    ctx.drawImage(battleMenu, 0, 64-32);
+     
+}
+
+
+setTimeout(function() { drawFight(c); }, 700);
+
+//var img = document.getElementById("scream");
+//ctx.drawImage(img, 10, 10);
+
+
+</script>
+     
+     
+</body>
+
+</html>
